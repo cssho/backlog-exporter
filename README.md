@@ -29,7 +29,7 @@ $ npm install -g backlog-exporter
 $ backlog-exporter COMMAND
 running command...
 $ backlog-exporter (--version)
-backlog-exporter/0.0.3 linux-x64 node-v20.18.3
+backlog-exporter/0.0.4 darwin-arm64 node-v23.7.0
 $ backlog-exporter --help [COMMAND]
 USAGE
   $ backlog-exporter COMMAND
@@ -40,6 +40,8 @@ USAGE
 # コマンド
 
 <!-- commands -->
+* [`backlog-exporter hello PERSON`](#backlog-exporter-hello-person)
+* [`backlog-exporter hello world`](#backlog-exporter-hello-world)
 * [`backlog-exporter help [COMMAND]`](#backlog-exporter-help-command)
 * [`backlog-exporter plugins`](#backlog-exporter-plugins)
 * [`backlog-exporter plugins add PLUGIN`](#backlog-exporter-plugins-add-plugin)
@@ -51,6 +53,48 @@ USAGE
 * [`backlog-exporter plugins uninstall [PLUGIN]`](#backlog-exporter-plugins-uninstall-plugin)
 * [`backlog-exporter plugins unlink [PLUGIN]`](#backlog-exporter-plugins-unlink-plugin)
 * [`backlog-exporter plugins update`](#backlog-exporter-plugins-update)
+
+## `backlog-exporter hello PERSON`
+
+Say hello
+
+```
+USAGE
+  $ backlog-exporter hello PERSON -f <value>
+
+ARGUMENTS
+  PERSON  Person to say hello to
+
+FLAGS
+  -f, --from=<value>  (required) Who is saying hello
+
+DESCRIPTION
+  Say hello
+
+EXAMPLES
+  $ backlog-exporter hello friend --from oclif
+  hello friend from oclif! (./src/commands/hello/index.ts)
+```
+
+_See code: [src/commands/hello/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.0.4/src/commands/hello/index.ts)_
+
+## `backlog-exporter hello world`
+
+Say hello world
+
+```
+USAGE
+  $ backlog-exporter hello world
+
+DESCRIPTION
+  Say hello world
+
+EXAMPLES
+  $ backlog-exporter hello world
+  hello world! (./src/commands/hello/world.ts)
+```
+
+_See code: [src/commands/hello/world.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.0.4/src/commands/hello/world.ts)_
 
 ## `backlog-exporter help [COMMAND]`
 
