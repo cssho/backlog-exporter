@@ -4,7 +4,7 @@
   "version": "0.0.3",
   "author": "ShuntaToda",
   "bin": {
-    "backlog-exporter": "./bin/run.js"
+    "backlog-exporter": "bin/run.js"
   },
   "bugs": "https://github.com/ShuntaToda/backlog-exporter/issues",
   "dependencies": {
@@ -62,7 +62,10 @@
       }
     }
   },
-  "repository": "https://github.com/ShuntaToda/backlog-exporter",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ShuntaToda/backlog-exporter.git"
+  },
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
     "lint": "eslint",
