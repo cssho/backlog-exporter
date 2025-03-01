@@ -26,6 +26,7 @@
     "eslint-config-oclif": "^6",
     "eslint-config-prettier": "^10",
     "mocha": "^10",
+    "nock": "^14.0.1",
     "oclif": "^4",
     "shx": "^0.3.3",
     "ts-node": "^10",
