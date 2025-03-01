@@ -1,12 +1,12 @@
 {
   "name": "backlog-exporter",
   "description": "A new CLI generated with oclif",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "ShuntaToda",
   "bin": {
     "backlog-exporter": "./bin/run.js"
   },
-  "bugs": "https://github.com/https://github.com/ShuntaToda/backlog-exporter/backlog-exporter/issues",
+  "bugs": "https://github.com/ShuntaToda/backlog-exporter/issues",
   "dependencies": {
     "@oclif/core": "^4",
     "@oclif/plugin-help": "^6",
@@ -40,7 +40,7 @@
     "./dist",
     "./oclif.manifest.json"
   ],
-  "homepage": "https://github.com/https://github.com/ShuntaToda/backlog-exporter/backlog-exporter",
+  "homepage": "https://github.com/ShuntaToda/backlog-exporter",
   "keywords": [
     "oclif"
   ],
@@ -62,7 +62,7 @@
       }
     }
   },
-  "repository": "https://github.com/ShuntaToda/backlog-exporter/backlog-exporter",
+  "repository": "https://github.com/ShuntaToda/backlog-exporter",
   "scripts": {
     "build": "shx rm -rf dist && tsc -b",
     "lint": "eslint",
