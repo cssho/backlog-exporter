@@ -38,7 +38,7 @@ $ npm install -g backlog-exporter
 $ backlog-exporter COMMAND
 running command...
 $ backlog-exporter (--version)
-backlog-exporter/0.0.4 darwin-arm64 node-v23.7.0
+backlog-exporter/0.0.6 darwin-arm64 node-v23.7.0
 $ backlog-exporter --help [COMMAND]
 USAGE
   $ backlog-exporter COMMAND
@@ -118,7 +118,7 @@ EXAMPLES
   BacklogからAPIキーを使用してissueとwikiを同時に取得する
 ```
 
-_See code: [src/commands/all/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.0.4/src/commands/all/index.ts)_
+_See code: [src/commands/all/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.0.6/src/commands/all/index.ts)_
 
 ## `backlog-exporter hello PERSON`
 
@@ -142,7 +142,7 @@ EXAMPLES
   hello friend from oclif! (./src/commands/hello/index.ts)
 ```
 
-_See code: [src/commands/hello/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.0.4/src/commands/hello/index.ts)_
+_See code: [src/commands/hello/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.0.6/src/commands/hello/index.ts)_
 
 ## `backlog-exporter hello world`
 
@@ -160,7 +160,7 @@ EXAMPLES
   hello world! (./src/commands/hello/world.ts)
 ```
 
-_See code: [src/commands/hello/world.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.0.4/src/commands/hello/world.ts)_
+_See code: [src/commands/hello/world.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.0.6/src/commands/hello/world.ts)_
 
 ## `backlog-exporter help [COMMAND]`
 
@@ -210,7 +210,7 @@ EXAMPLES
   Download issues from Backlog using API key
 ```
 
-_See code: [src/commands/issue/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.0.4/src/commands/issue/index.ts)_
+_See code: [src/commands/issue/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.0.6/src/commands/issue/index.ts)_
 
 ## `backlog-exporter plugins`
 
@@ -527,7 +527,7 @@ EXAMPLES
   Download wiki content from Backlog using API key
 ```
 
-_See code: [src/commands/wiki/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.0.4/src/commands/wiki/index.ts)_
+_See code: [src/commands/wiki/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.0.6/src/commands/wiki/index.ts)_
 <!-- commandsstop -->
 
 # 出力形式
