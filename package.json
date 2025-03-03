@@ -57,8 +57,8 @@
     ],
     "topicSeparator": " ",
     "topics": {
-      "hello": {
-        "description": "Say hello to the world and others"
+      "update": {
+        "description": "Backlogから最新データを取得して更新する"
       }
     }
   },

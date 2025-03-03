@@ -1,22 +1,23 @@
-import {Args, Command, Flags} from '@oclif/core'
+import {Command, Flags} from '@oclif/core'
 import * as dotenv from 'dotenv'
 import path from 'node:path'
 
 import {downloadIssues, downloadWikis} from '../../utils/backlog-api.js'
 import {validateAndGetProjectId} from '../../utils/backlog.js'
 import {createOutputDirectory, getApiKey} from '../../utils/common.js'
+import {FolderType, updateSettings} from '../../utils/settings.js'
 
 // .envファイルを読み込む
 dotenv.config()
 
-export default class DownloadAll extends Command {
-  static args = {
-    url: Args.string({description: 'URL to download from', required: false}),
-  }
-  static description = 'Backlogからissueとwikiを同時に取得する'
+export default class All extends Command {
+  static description = 'Backlogから課題とWikiを取得してMarkdownファイルとして保存する'
   static examples = [
-    `<%= config.bin %> <%= command.id %> --domain cm1.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY -o ./output-dir
-BacklogからAPIキーを使用してissueとwikiを同時に取得する
+    `<%= config.bin %> <%= command.id %> --domain example.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY
+課題とWikiをMarkdownファイルとして保存する
+`,
+    `<%= config.bin %> <%= command.id %> --domain example.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY --output ./my-project
+指定したディレクトリに課題とWikiを保存する
 `,
   ]
   static flags = {
@@ -24,52 +25,78 @@ BacklogからAPIキーを使用してissueとwikiを同時に取得する
       description: 'Backlog API key (環境変数 BACKLOG_API_KEY からも自動読み取り可能)',
       required: false,
     }),
-    count: Flags.integer({char: 'c', default: 100, description: '一度に取得する課題数', required: false}),
-    domain: Flags.string({description: 'Backlog domain (e.g. example.backlog.jp)', required: true}),
+    domain: Flags.string({
+      description: 'Backlog domain (e.g. example.backlog.jp)',
+      required: true,
+    }),
     output: Flags.string({
       char: 'o',
-      description: '出力ディレクトリのルートパス（デフォルトはプロジェクトキー）',
+      description: '出力ディレクトリパス',
       required: false,
     }),
-    projectIdOrKey: Flags.string({description: 'Backlog project ID or key', required: true}),
-    statusId: Flags.string({description: 'Filter issues by status ID', required: false}),
+    projectIdOrKey: Flags.string({
+      description: 'Backlog project ID or key',
+      required: true,
+    }),
   }
 
   async run(): Promise<void> {
-    const {flags} = await this.parse(DownloadAll)
-
-    const {count, domain, projectIdOrKey, statusId} = flags
-    const apiKey = getApiKey(this, flags.apiKey)
-
-    // 出力ディレクトリのルートパスを設定（デフォルトはプロジェクトキー）
-    const outputRoot = flags.output || projectIdOrKey
-
-    this.log(`Backlogから ${domain} のプロジェクト ${projectIdOrKey} の課題とWikiを取得しています...`)
-    this.log(`出力ディレクトリ: ${outputRoot}`)
+    const {flags} = await this.parse(All)
 
     try {
+      const {domain, projectIdOrKey} = flags
+      const apiKey = flags.apiKey || getApiKey(this)
+      const outputRoot = flags.output || './backlog-data'
+
+      // 出力ディレクトリの作成
+      await createOutputDirectory(outputRoot)
+
       // プロジェクトキーからプロジェクトIDを取得
       const projectId = await validateAndGetProjectId(domain, projectIdOrKey, apiKey)
       this.log(`プロジェクトID: ${projectId} を使用します`)
 
-      // issueとwikiのサブディレクトリパスを作成
+      // 課題の出力ディレクトリ
       const issueOutput = path.join(outputRoot, 'issues')
-      const wikiOutput = path.join(outputRoot, 'wiki')
-
-      // 出力ディレクトリの作成
-      await createOutputDirectory(outputRoot)
       await createOutputDirectory(issueOutput)
+
+      // Wikiの出力ディレクトリ
+      const wikiOutput = path.join(outputRoot, 'wiki')
       await createOutputDirectory(wikiOutput)
 
-      // 課題とWikiを並列で取得
-      await Promise.all([
-        downloadIssues(this, domain, projectId, apiKey, issueOutput, count, statusId),
-        downloadWikis(this, domain, projectIdOrKey, apiKey, wikiOutput),
-      ])
+      // 課題の取得と保存
+      this.log('課題の取得を開始します...')
+      await downloadIssues(this, domain, projectId, apiKey, issueOutput, 100)
 
-      this.log('すべてのダウンロードが完了しました！')
+      // 課題フォルダに設定ファイルを保存
+      await updateSettings(issueOutput, {
+        apiKey,
+        domain,
+        folderType: FolderType.ISSUE,
+        lastUpdated: new Date().toISOString(),
+        outputDir: issueOutput,
+        projectIdOrKey,
+      })
+      this.log('課題の取得が完了しました')
+
+      // Wikiの取得と保存
+      this.log('Wikiの取得を開始します...')
+      await downloadWikis(this, domain, projectIdOrKey, apiKey, wikiOutput)
+
+      // Wikiフォルダに設定ファイルを保存
+      await updateSettings(wikiOutput, {
+        apiKey,
+        domain,
+        folderType: FolderType.WIKI,
+        lastUpdated: new Date().toISOString(),
+        outputDir: wikiOutput,
+        projectIdOrKey,
+      })
+      this.log('Wikiの取得が完了しました')
+
+      this.log('すべてのデータの取得が完了しました！')
     } catch (error) {
-      this.error(`ダウンロードに失敗しました: ${error instanceof Error ? error.message : String(error)}`)
+      const errorMessage = error instanceof Error ? error.message : String(error)
+      this.error(`データの取得に失敗しました: ${errorMessage}`)
     }
   }
 }
