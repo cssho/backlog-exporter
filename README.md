@@ -7,21 +7,38 @@ Backlog のデータをエクスポートするためのコマンドラインツ
 [![Downloads/week](https://img.shields.io/npm/dw/backlog-exporter.svg)](https://npmjs.org/package/backlog-exporter)
 
 <!-- toc -->
-
-- [backlog-exporter](#backlog-exporter)
-- [概要](#概要)
-- [インストール](#インストール)
-- [使用方法](#使用方法)
-- [課題のエクスポート](#課題のエクスポート)
-- [Wiki のエクスポート](#wikiのエクスポート)
-- [課題と Wiki の一括エクスポート](#課題とwikiの一括エクスポート)
-- [データの更新](#データの更新)
-- [コマンド](#コマンド)
-- [出力形式](#出力形式)
-- [課題のタイトル](#課題のタイトル)
-- [Wiki のタイトル](#wiki-のタイトル)
-- [その他の特徴](#その他の特徴)
-- [最近の変更点](#最近の変更点)
+* [backlog-exporter](#backlog-exporter)
+* [概要](#概要)
+* [インストール](#インストール)
+* [使用方法](#使用方法)
+* [課題のエクスポート](#課題のエクスポート)
+* [Wikiのエクスポート](#wikiのエクスポート)
+* [課題とWikiの一括エクスポート](#課題とwikiの一括エクスポート)
+* [データの更新](#データの更新)
+* [npxを使った課題のエクスポート](#npxを使った課題のエクスポート)
+* [npxを使ったデータの更新](#npxを使ったデータの更新)
+* [課題のエクスポート](#課題のエクスポート)
+* [基本的な使用方法](#基本的な使用方法)
+* [出力先を指定](#出力先を指定)
+* [Wiki のエクスポート](#wiki-のエクスポート)
+* [基本的な使用方法](#基本的な使用方法)
+* [出力先を指定](#出力先を指定)
+* [課題と Wiki の一括エクスポート](#課題と-wiki-の一括エクスポート)
+* [基本的な使用方法](#基本的な使用方法)
+* [出力先を指定](#出力先を指定)
+* [データの更新](#データの更新)
+* [カレントディレクトリとそのサブディレクトリのデータを更新](#カレントディレクトリとそのサブディレクトリのデータを更新)
+* [指定したディレクトリとそのサブディレクトリのデータを更新](#指定したディレクトリとそのサブディレクトリのデータを更新)
+* [確認プロンプトをスキップして更新](#確認プロンプトをスキップして更新)
+* [課題のみを更新](#課題のみを更新)
+* [Wikiのみを更新](#wikiのみを更新)
+* [APIキーを指定して更新](#apiキーを指定して更新)
+* [コマンド](#コマンド)
+* [出力形式](#出力形式)
+* [課題のタイトル](#課題のタイトル)
+* [Wiki のタイトル](#wiki-のタイトル)
+* [その他の特徴](#その他の特徴)
+* [最近の変更点](#最近の変更点)
 <!-- tocstop -->
 
 # 概要
@@ -37,27 +54,17 @@ backlog-exporter は、Backlog のデータをローカルにエクスポート�
 # インストール
 
 <!-- usage -->
-
 ```sh-session
 $ npm install -g backlog-exporter
 $ backlog-exporter COMMAND
 running command...
 $ backlog-exporter (--version)
-backlog-exporter/0.0.6 linux-x64 node-v20.18.3
+backlog-exporter/0.1.0 darwin-arm64 node-v23.7.0
 $ backlog-exporter --help [COMMAND]
 USAGE
   $ backlog-exporter COMMAND
 ...
 ```
-
-インストールせずに`npx`を使って直接実行することもできます：
-
-```sh-session
-$ npx backlog-exporter COMMAND
-```
-
-これにより、インストールせずに一時的にツールを実行できます。
-
 <!-- usagestop -->
 
 # 使用方法
@@ -167,22 +174,95 @@ $ backlog-exporter update --apiKey YOUR_API_KEY
 # コマンド
 
 <!-- commands -->
+* [`backlog-exporter all [URL]`](#backlog-exporter-all-url)
+* [`backlog-exporter hello PERSON`](#backlog-exporter-hello-person)
+* [`backlog-exporter hello world`](#backlog-exporter-hello-world)
+* [`backlog-exporter help [COMMAND]`](#backlog-exporter-help-command)
+* [`backlog-exporter issue [URL]`](#backlog-exporter-issue-url)
+* [`backlog-exporter plugins`](#backlog-exporter-plugins)
+* [`backlog-exporter plugins add PLUGIN`](#backlog-exporter-plugins-add-plugin)
+* [`backlog-exporter plugins:inspect PLUGIN...`](#backlog-exporter-pluginsinspect-plugin)
+* [`backlog-exporter plugins install PLUGIN`](#backlog-exporter-plugins-install-plugin)
+* [`backlog-exporter plugins link PATH`](#backlog-exporter-plugins-link-path)
+* [`backlog-exporter plugins remove [PLUGIN]`](#backlog-exporter-plugins-remove-plugin)
+* [`backlog-exporter plugins reset`](#backlog-exporter-plugins-reset)
+* [`backlog-exporter plugins uninstall [PLUGIN]`](#backlog-exporter-plugins-uninstall-plugin)
+* [`backlog-exporter plugins unlink [PLUGIN]`](#backlog-exporter-plugins-unlink-plugin)
+* [`backlog-exporter plugins update`](#backlog-exporter-plugins-update)
+* [`backlog-exporter wiki [URL]`](#backlog-exporter-wiki-url)
 
-- [`backlog-exporter help [COMMAND]`](#backlog-exporter-help-command)
-- [`backlog-exporter issue`](#backlog-exporter-issue)
-- [`backlog-exporter wiki`](#backlog-exporter-wiki)
-- [`backlog-exporter all`](#backlog-exporter-all)
-- [`backlog-exporter update [DIRECTORY]`](#backlog-exporter-update-directory)
-- [`backlog-exporter plugins`](#backlog-exporter-plugins)
-- [`backlog-exporter plugins add PLUGIN`](#backlog-exporter-plugins-add-plugin)
-- [`backlog-exporter plugins:inspect PLUGIN...`](#backlog-exporter-pluginsinspect-plugin)
-- [`backlog-exporter plugins install PLUGIN`](#backlog-exporter-plugins-install-plugin)
-- [`backlog-exporter plugins link PATH`](#backlog-exporter-plugins-link-path)
-- [`backlog-exporter plugins remove [PLUGIN]`](#backlog-exporter-plugins-remove-plugin)
-- [`backlog-exporter plugins reset`](#backlog-exporter-plugins-reset)
-- [`backlog-exporter plugins uninstall [PLUGIN]`](#backlog-exporter-plugins-uninstall-plugin)
-- [`backlog-exporter plugins unlink [PLUGIN]`](#backlog-exporter-plugins-unlink-plugin)
-- [`backlog-exporter plugins update`](#backlog-exporter-plugins-update)
+## `backlog-exporter all [URL]`
+
+Backlogからissueとwikiを同時に取得する
+
+```
+USAGE
+  $ backlog-exporter all [URL] --domain <value> --projectIdOrKey <value> [--apiKey <value>] [-c <value>]
+    [--issueOutput <value>] [--statusId <value>] [--wikiOutput <value>]
+
+ARGUMENTS
+  URL  URL to download from
+
+FLAGS
+  -c, --count=<value>           [default: 100] 一度に取得する課題数
+      --apiKey=<value>          Backlog API key (環境変数 BACKLOG_API_KEY からも自動読み取り可能)
+      --domain=<value>          (required) Backlog domain (e.g. example.backlog.jp)
+      --issueOutput=<value>     [default: ./backlog-issues] Issue出力ディレクトリパス
+      --projectIdOrKey=<value>  (required) Backlog project ID or key
+      --statusId=<value>        Filter issues by status ID
+      --wikiOutput=<value>      [default: ./backlog-wiki] Wiki出力ディレクトリパス
+
+DESCRIPTION
+  Backlogからissueとwikiを同時に取得する
+
+EXAMPLES
+  $ backlog-exporter all --domain cm1.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY --issueOutput ./issue-data --wikiOutput ./wiki-data
+  BacklogからAPIキーを使用してissueとwikiを同時に取得する
+```
+
+_See code: [src/commands/all/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.1.0/src/commands/all/index.ts)_
+
+## `backlog-exporter hello PERSON`
+
+Say hello
+
+```
+USAGE
+  $ backlog-exporter hello PERSON -f <value>
+
+ARGUMENTS
+  PERSON  Person to say hello to
+
+FLAGS
+  -f, --from=<value>  (required) Who is saying hello
+
+DESCRIPTION
+  Say hello
+
+EXAMPLES
+  $ backlog-exporter hello friend --from oclif
+  hello friend from oclif! (./src/commands/hello/index.ts)
+```
+
+_See code: [src/commands/hello/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.1.0/src/commands/hello/index.ts)_
+
+## `backlog-exporter hello world`
+
+Say hello world
+
+```
+USAGE
+  $ backlog-exporter hello world
+
+DESCRIPTION
+  Say hello world
+
+EXAMPLES
+  $ backlog-exporter hello world
+  hello world! (./src/commands/hello/world.ts)
+```
+
+_See code: [src/commands/hello/world.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.1.0/src/commands/hello/world.ts)_
 
 ## `backlog-exporter help [COMMAND]`
 
@@ -203,6 +283,36 @@ DESCRIPTION
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.26/src/commands/help.ts)_
+
+## `backlog-exporter issue [URL]`
+
+Download issues from Backlog
+
+```
+USAGE
+  $ backlog-exporter issue [URL] --domain <value> --projectIdOrKey <value> [--apiKey <value>] [-c <value>]
+    [-o <value>] [--statusId <value>]
+
+ARGUMENTS
+  URL  URL to download from
+
+FLAGS
+  -c, --count=<value>           [default: 100] 一度に取得する課題数
+  -o, --output=<value>          [default: ./backlog-issues] Output directory path
+      --apiKey=<value>          Backlog API key (環境変数 BACKLOG_API_KEY からも自動読み取り可能)
+      --domain=<value>          (required) Backlog domain (e.g. example.backlog.jp)
+      --projectIdOrKey=<value>  (required) Backlog project ID or key
+      --statusId=<value>        Filter issues by status ID
+
+DESCRIPTION
+  Download issues from Backlog
+
+EXAMPLES
+  $ backlog-exporter issue --domain cm1.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY --output ./issue-data
+  Download issues from Backlog using API key
+```
+
+_See code: [src/commands/issue/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.1.0/src/commands/issue/index.ts)_
 
 ## `backlog-exporter plugins`
 
@@ -494,118 +604,32 @@ DESCRIPTION
 
 _See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.34/src/commands/plugins/update.ts)_
 
-## `backlog-exporter update [DIRECTORY]`
+## `backlog-exporter wiki [URL]`
 
-Backlog から最新データを取得して更新する
+Download content from Backlog Wiki
 
 ```
 USAGE
-  $ backlog-exporter update [DIRECTORY] [--apiKey <value>] [--domain <value>] [-f] [--issuesOnly]
-  [--projectIdOrKey <value>] [--wikisOnly]
+  $ backlog-exporter wiki [URL] --domain <value> --projectIdOrKey <value> [--apiKey <value>] [-o <value>]
 
 ARGUMENTS
-  DIRECTORY  更新対象のディレクトリ（設定ファイルが保存されている場所）
+  URL  URL to download from
 
 FLAGS
-  -f, --force             確認プロンプトをスキップする
-  --apiKey=<value>        Backlog API key (環境変数 BACKLOG_API_KEY からも自動読み取り可能)
-  --domain=<value>        Backlog domain (e.g. example.backlog.jp)
-  --issuesOnly            課題のみを更新する
-  --projectIdOrKey=<value>  Backlog project ID or key
-  --wikisOnly             Wikiのみを更新する
+  -o, --output=<value>          [default: ./backlog-wiki] Output directory path
+      --apiKey=<value>          Backlog API key (環境変数 BACKLOG_API_KEY からも自動読み取り可能)
+      --domain=<value>          (required) Backlog domain (e.g. example.backlog.jp)
+      --projectIdOrKey=<value>  (required) Backlog project ID or key
 
 DESCRIPTION
-  Backlogから最新データを取得して更新する
+  Download content from Backlog Wiki
 
 EXAMPLES
-  $ backlog-exporter update
-  カレントディレクトリの設定を使用して更新する
-
-  $ backlog-exporter update --force
-  確認プロンプトをスキップする
-
-  $ backlog-exporter update --apiKey YOUR_API_KEY --domain example.backlog.jp --projectIdOrKey PROJECT_KEY
-  指定したパラメータで更新する（設定ファイルが存在する場合は上書きされます）
-
-  $ backlog-exporter update ./my-project
-  指定したディレクトリの設定を使用して更新する
+  $ backlog-exporter wiki --domain cm1.backlog.jp --projectId PROJECT_ID --apiKey YOUR_API_KEY --output ./wiki-data
+  Download wiki content from Backlog using API key
 ```
 
-## `backlog-exporter issue`
-
-Backlog から課題を取得して Markdown ファイルとして保存する
-
-```
-USAGE
-  $ backlog-exporter issue [--apiKey <value>] [--domain <value>] [--output <value>] [--projectIdOrKey <value>]
-
-FLAGS
-  --apiKey=<value>        Backlog API key (環境変数 BACKLOG_API_KEY からも自動読み取り可能)
-  --domain=<value>        Backlog domain (e.g. example.backlog.jp)
-  --output=<value>        出力ディレクトリパス
-  --projectIdOrKey=<value>  Backlog project ID or key
-
-DESCRIPTION
-  Backlogから課題を取得してMarkdownファイルとして保存する
-
-EXAMPLES
-  $ backlog-exporter issue --domain example.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY
-  課題をMarkdownファイルとして保存する
-
-  $ backlog-exporter issue --domain example.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY --output ./my-project
-  指定したディレクトリに課題を保存する
-```
-
-## `backlog-exporter wiki`
-
-Backlog から Wiki を取得して Markdown ファイルとして保存する
-
-```
-USAGE
-  $ backlog-exporter wiki [--apiKey <value>] [--domain <value>] [--output <value>] [--projectIdOrKey <value>]
-
-FLAGS
-  --apiKey=<value>        Backlog API key (環境変数 BACKLOG_API_KEY からも自動読み取り可能)
-  --domain=<value>        Backlog domain (e.g. example.backlog.jp)
-  --output=<value>        出力ディレクトリパス
-  --projectIdOrKey=<value>  Backlog project ID or key
-
-DESCRIPTION
-  Backlogから Wiki を取得してMarkdownファイルとして保存する
-
-EXAMPLES
-  $ backlog-exporter wiki --domain example.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY
-  Wikiをダウンロードする
-
-  $ backlog-exporter wiki --domain example.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY --output ./my-project
-  指定したディレクトリにWikiを保存する
-```
-
-## `backlog-exporter all`
-
-Backlog から課題と Wiki を取得して Markdown ファイルとして保存する
-
-```
-USAGE
-  $ backlog-exporter all [--apiKey <value>] [--domain <value>] [--output <value>] [--projectIdOrKey <value>]
-
-FLAGS
-  --apiKey=<value>        Backlog API key (環境変数 BACKLOG_API_KEY からも自動読み取り可能)
-  --domain=<value>        Backlog domain (e.g. example.backlog.jp)
-  --output=<value>        出力ディレクトリパス
-  --projectIdOrKey=<value>  Backlog project ID or key
-
-DESCRIPTION
-  Backlogから課題とWikiを取得してMarkdownファイルとして保存する
-
-EXAMPLES
-  $ backlog-exporter all --domain example.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY
-  課題とWikiをダウンロードする
-
-  $ backlog-exporter all --domain example.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY --output ./my-project
-  指定したディレクトリに課題とWikiを保存する
-```
-
+_See code: [src/commands/wiki/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.1.0/src/commands/wiki/index.ts)_
 <!-- commandsstop -->
 
 # 出力形式
