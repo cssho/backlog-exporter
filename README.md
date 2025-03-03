@@ -59,7 +59,7 @@ $ npm install -g backlog-exporter
 $ backlog-exporter COMMAND
 running command...
 $ backlog-exporter (--version)
-backlog-exporter/0.1.0 darwin-arm64 node-v23.7.0
+backlog-exporter/0.1.0 linux-x64 node-v20.18.3
 $ backlog-exporter --help [COMMAND]
 USAGE
   $ backlog-exporter COMMAND
@@ -174,11 +174,7 @@ $ backlog-exporter update --apiKey YOUR_API_KEY
 # コマンド
 
 <!-- commands -->
-* [`backlog-exporter all [URL]`](#backlog-exporter-all-url)
-* [`backlog-exporter hello PERSON`](#backlog-exporter-hello-person)
-* [`backlog-exporter hello world`](#backlog-exporter-hello-world)
 * [`backlog-exporter help [COMMAND]`](#backlog-exporter-help-command)
-* [`backlog-exporter issue [URL]`](#backlog-exporter-issue-url)
 * [`backlog-exporter plugins`](#backlog-exporter-plugins)
 * [`backlog-exporter plugins add PLUGIN`](#backlog-exporter-plugins-add-plugin)
 * [`backlog-exporter plugins:inspect PLUGIN...`](#backlog-exporter-pluginsinspect-plugin)
@@ -189,80 +185,6 @@ $ backlog-exporter update --apiKey YOUR_API_KEY
 * [`backlog-exporter plugins uninstall [PLUGIN]`](#backlog-exporter-plugins-uninstall-plugin)
 * [`backlog-exporter plugins unlink [PLUGIN]`](#backlog-exporter-plugins-unlink-plugin)
 * [`backlog-exporter plugins update`](#backlog-exporter-plugins-update)
-* [`backlog-exporter wiki [URL]`](#backlog-exporter-wiki-url)
-
-## `backlog-exporter all [URL]`
-
-Backlogからissueとwikiを同時に取得する
-
-```
-USAGE
-  $ backlog-exporter all [URL] --domain <value> --projectIdOrKey <value> [--apiKey <value>] [-c <value>]
-    [--issueOutput <value>] [--statusId <value>] [--wikiOutput <value>]
-
-ARGUMENTS
-  URL  URL to download from
-
-FLAGS
-  -c, --count=<value>           [default: 100] 一度に取得する課題数
-      --apiKey=<value>          Backlog API key (環境変数 BACKLOG_API_KEY からも自動読み取り可能)
-      --domain=<value>          (required) Backlog domain (e.g. example.backlog.jp)
-      --issueOutput=<value>     [default: ./backlog-issues] Issue出力ディレクトリパス
-      --projectIdOrKey=<value>  (required) Backlog project ID or key
-      --statusId=<value>        Filter issues by status ID
-      --wikiOutput=<value>      [default: ./backlog-wiki] Wiki出力ディレクトリパス
-
-DESCRIPTION
-  Backlogからissueとwikiを同時に取得する
-
-EXAMPLES
-  $ backlog-exporter all --domain cm1.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY --issueOutput ./issue-data --wikiOutput ./wiki-data
-  BacklogからAPIキーを使用してissueとwikiを同時に取得する
-```
-
-_See code: [src/commands/all/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.1.0/src/commands/all/index.ts)_
-
-## `backlog-exporter hello PERSON`
-
-Say hello
-
-```
-USAGE
-  $ backlog-exporter hello PERSON -f <value>
-
-ARGUMENTS
-  PERSON  Person to say hello to
-
-FLAGS
-  -f, --from=<value>  (required) Who is saying hello
-
-DESCRIPTION
-  Say hello
-
-EXAMPLES
-  $ backlog-exporter hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
-```
-
-_See code: [src/commands/hello/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.1.0/src/commands/hello/index.ts)_
-
-## `backlog-exporter hello world`
-
-Say hello world
-
-```
-USAGE
-  $ backlog-exporter hello world
-
-DESCRIPTION
-  Say hello world
-
-EXAMPLES
-  $ backlog-exporter hello world
-  hello world! (./src/commands/hello/world.ts)
-```
-
-_See code: [src/commands/hello/world.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.1.0/src/commands/hello/world.ts)_
 
 ## `backlog-exporter help [COMMAND]`
 
@@ -283,36 +205,6 @@ DESCRIPTION
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v6.2.26/src/commands/help.ts)_
-
-## `backlog-exporter issue [URL]`
-
-Download issues from Backlog
-
-```
-USAGE
-  $ backlog-exporter issue [URL] --domain <value> --projectIdOrKey <value> [--apiKey <value>] [-c <value>]
-    [-o <value>] [--statusId <value>]
-
-ARGUMENTS
-  URL  URL to download from
-
-FLAGS
-  -c, --count=<value>           [default: 100] 一度に取得する課題数
-  -o, --output=<value>          [default: ./backlog-issues] Output directory path
-      --apiKey=<value>          Backlog API key (環境変数 BACKLOG_API_KEY からも自動読み取り可能)
-      --domain=<value>          (required) Backlog domain (e.g. example.backlog.jp)
-      --projectIdOrKey=<value>  (required) Backlog project ID or key
-      --statusId=<value>        Filter issues by status ID
-
-DESCRIPTION
-  Download issues from Backlog
-
-EXAMPLES
-  $ backlog-exporter issue --domain cm1.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY --output ./issue-data
-  Download issues from Backlog using API key
-```
-
-_See code: [src/commands/issue/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.1.0/src/commands/issue/index.ts)_
 
 ## `backlog-exporter plugins`
 
@@ -603,33 +495,6 @@ DESCRIPTION
 ```
 
 _See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v5.4.34/src/commands/plugins/update.ts)_
-
-## `backlog-exporter wiki [URL]`
-
-Download content from Backlog Wiki
-
-```
-USAGE
-  $ backlog-exporter wiki [URL] --domain <value> --projectIdOrKey <value> [--apiKey <value>] [-o <value>]
-
-ARGUMENTS
-  URL  URL to download from
-
-FLAGS
-  -o, --output=<value>          [default: ./backlog-wiki] Output directory path
-      --apiKey=<value>          Backlog API key (環境変数 BACKLOG_API_KEY からも自動読み取り可能)
-      --domain=<value>          (required) Backlog domain (e.g. example.backlog.jp)
-      --projectIdOrKey=<value>  (required) Backlog project ID or key
-
-DESCRIPTION
-  Download content from Backlog Wiki
-
-EXAMPLES
-  $ backlog-exporter wiki --domain cm1.backlog.jp --projectId PROJECT_ID --apiKey YOUR_API_KEY --output ./wiki-data
-  Download wiki content from Backlog using API key
-```
-
-_See code: [src/commands/wiki/index.ts](https://github.com/ShuntaToda/backlog-exporter/blob/v0.1.0/src/commands/wiki/index.ts)_
 <!-- commandsstop -->
 
 # 出力形式
