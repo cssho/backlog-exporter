@@ -2,6 +2,7 @@ import {Command} from '@oclif/core'
 import ky from 'ky'
 import * as fs from 'node:fs/promises'
 import path from 'node:path'
+import process from 'node:process'
 
 import {sanitizeFileName, sanitizeWikiFileName} from './common.js'
 import {RateLimiter} from './sleep.js'
@@ -79,7 +80,8 @@ export async function downloadIssues(
       params.append('statusId[]', options.statusId)
     }
 
-    command.log(`課題を取得中... (オフセット: ${offset}, 件数: ${maxCount})`)
+    // 進捗状況を一行で更新
+    process.stdout.write(`\r課題を取得中... (${allIssues.length}件取得済み)`)
 
     return ky.get(`${baseUrl}/issues?${params.toString()}`).json<
       Array<{
@@ -117,7 +119,7 @@ export async function downloadIssues(
   // 課題取得開始
   await fetchAllIssues(0)
 
-  command.log(`合計 ${allIssues.length}件の課題が見つかりました。`)
+  command.log(`\n合計 ${allIssues.length}件の課題が見つかりました。`)
 
   // 前回の更新日時より新しい課題のみをフィルタリング
   let filteredIssues = allIssues
@@ -141,6 +143,10 @@ export async function downloadIssues(
   // 並列処理ではなく順次処理に変更
   for (const issue of filteredIssues) {
     try {
+      // 進捗状況を一行で更新
+      const currentIndex = filteredIssues.indexOf(issue) + 1
+      process.stdout.write(`\r課題を保存中... (${currentIndex}/${filteredIssues.length}件)`)
+
       // BacklogのIssueへのリンクを作成
       const backlogIssueUrl = `https://${options.domain}/view/${issue.issueKey}`
 
@@ -210,7 +216,7 @@ ${issue.description || '詳細情報なし'}${commentsSection}`
     }
   }
 
-  command.log('課題のダウンロードが完了しました！')
+  command.log('\n課題のダウンロードが完了しました！')
 }
 
 /**
@@ -341,6 +347,10 @@ export async function downloadWikis(
       // eslint-disable-next-line no-await-in-loop
       await rateLimiter.increment()
 
+      // 進捗状況を一行で更新
+      const currentIndex = filteredWikis.indexOf(wiki) + 1
+      process.stdout.write(`\rWikiを取得中... (${currentIndex}/${filteredWikis.length}件)`)
+
       // eslint-disable-next-line no-await-in-loop
       const wikiDetail = await ky
         .get(`${baseUrl}/wikis/${wikiId}?projectIdOrKey=${options.projectIdOrKey}&apiKey=${options.apiKey}`)
@@ -375,10 +385,14 @@ export async function downloadWikis(
       const markdownContent = `# ${wiki.name}\n\n[Backlog Wiki Link](${backlogWikiUrl})\n\n${content}`
       // eslint-disable-next-line no-await-in-loop
       await fs.writeFile(wikiFilePath, markdownContent)
+
+      // 進捗状況を一行で更新
+      const wikiIndex = filteredWikis.indexOf(wiki) + 1
+      process.stdout.write(`\rWikiを保存中... (${wikiIndex}/${filteredWikis.length}件)`)
     } catch (error) {
       command.warn(`Wiki ${wiki.name} の取得に失敗しました: ${error instanceof Error ? error.message : String(error)}`)
     }
   }
 
-  command.log('Wikiのダウンロードが完了しました！')
+  command.log('\nWikiのダウンロードが完了しました！')
 }
