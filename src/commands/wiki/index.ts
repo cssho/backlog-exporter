@@ -49,6 +49,15 @@ Wikiをダウンロードする
       // 出力ディレクトリの作成
       await createOutputDirectory(outputDir)
 
+      // 設定ファイルを保存
+      await updateSettings(outputDir, {
+        apiKey,
+        domain,
+        folderType: FolderType.WIKI,
+        outputDir,
+        projectIdOrKey,
+      })
+
       // Wikiの取得と保存
       await downloadWikis(this, {
         apiKey,
@@ -57,14 +66,9 @@ Wikiをダウンロードする
         projectIdOrKey,
       })
 
-      // 設定ファイルを保存
+      // 最終更新日時を更新
       await updateSettings(outputDir, {
-        apiKey,
-        domain,
-        folderType: FolderType.WIKI,
         lastUpdated: new Date().toISOString(),
-        outputDir,
-        projectIdOrKey,
       })
 
       this.log('Wikiの取得が完了しました！')
