@@ -65,7 +65,13 @@ export default class All extends Command {
 
       // 課題の取得と保存
       this.log('課題の取得を開始します...')
-      await downloadIssues(this, domain, projectId, apiKey, issueOutput, 100)
+      await downloadIssues(this, {
+        apiKey,
+        count: 100,
+        domain,
+        outputDir: issueOutput,
+        projectId,
+      })
 
       // 課題フォルダに設定ファイルを保存
       await updateSettings(issueOutput, {
@@ -80,7 +86,12 @@ export default class All extends Command {
 
       // Wikiの取得と保存
       this.log('Wikiの取得を開始します...')
-      await downloadWikis(this, domain, projectIdOrKey, apiKey, wikiOutput)
+      await downloadWikis(this, {
+        apiKey,
+        domain,
+        outputDir: wikiOutput,
+        projectIdOrKey,
+      })
 
       // Wikiフォルダに設定ファイルを保存
       await updateSettings(wikiOutput, {

@@ -50,7 +50,12 @@ Wikiをダウンロードする
       await createOutputDirectory(outputDir)
 
       // Wikiの取得と保存
-      await downloadWikis(this, domain, projectIdOrKey, apiKey, outputDir)
+      await downloadWikis(this, {
+        apiKey,
+        domain,
+        outputDir,
+        projectIdOrKey,
+      })
 
       // 設定ファイルを保存
       await updateSettings(outputDir, {
