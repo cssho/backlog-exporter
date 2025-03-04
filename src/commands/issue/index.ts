@@ -55,7 +55,13 @@ export default class Issue extends Command {
       this.log(`プロジェクトID: ${projectId} を使用します`)
 
       // 課題の取得と保存
-      await downloadIssues(this, domain, projectId, apiKey, outputDir, 100)
+      await downloadIssues(this, {
+        apiKey,
+        count: 100,
+        domain,
+        outputDir,
+        projectId,
+      })
 
       // 設定ファイルを保存
       await updateSettings(outputDir, {

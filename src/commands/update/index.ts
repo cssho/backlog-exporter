@@ -271,7 +271,17 @@ export default class Update extends Command {
   }): Promise<void> {
     this.log('課題の更新を開始します...')
 
-    await downloadIssues(this, options.domain, options.projectId, options.apiKey, options.targetDir, 100)
+    // 設定ファイルから前回の更新日時を取得
+    const {lastUpdated} = await loadSettings(options.targetDir)
+
+    await downloadIssues(this, {
+      apiKey: options.apiKey,
+      count: 100,
+      domain: options.domain,
+      lastUpdated,
+      outputDir: options.targetDir,
+      projectId: options.projectId,
+    })
 
     // 設定ファイルを更新
     await updateSettings(options.targetDir, {
@@ -295,7 +305,16 @@ export default class Update extends Command {
   }): Promise<void> {
     this.log('Wikiの更新を開始します...')
 
-    await downloadWikis(this, options.domain, options.projectIdOrKey, options.apiKey, options.targetDir)
+    // 設定ファイルから前回の更新日時を取得
+    const {lastUpdated} = await loadSettings(options.targetDir)
+
+    await downloadWikis(this, {
+      apiKey: options.apiKey,
+      domain: options.domain,
+      lastUpdated,
+      outputDir: options.targetDir,
+      projectIdOrKey: options.projectIdOrKey,
+    })
 
     // 設定ファイルを更新
     await updateSettings(options.targetDir, {
