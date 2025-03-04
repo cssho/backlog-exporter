@@ -19,6 +19,9 @@ export default class All extends Command {
     `<%= config.bin %> <%= command.id %> --domain example.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY --output ./my-project
 指定したディレクトリに課題とWikiを保存する
 `,
+    `<%= config.bin %> <%= command.id %> --domain example.backlog.jp --projectIdOrKey PROJECT_KEY --apiKey YOUR_API_KEY --maxCount 1000
+最大1000件の課題を取得する（デフォルトは100件）
+`,
   ]
   static flags = {
     apiKey: Flags.string({
@@ -28,6 +31,12 @@ export default class All extends Command {
     domain: Flags.string({
       description: 'Backlog domain (e.g. example.backlog.jp)',
       required: true,
+    }),
+    maxCount: Flags.integer({
+      char: 'm',
+      default: 5000,
+      description: '一度に取得する課題の最大数（デフォルト: 5000）',
+      required: false,
     }),
     output: Flags.string({
       char: 'o',
@@ -44,7 +53,7 @@ export default class All extends Command {
     const {flags} = await this.parse(All)
 
     try {
-      const {domain, projectIdOrKey} = flags
+      const {domain, maxCount, projectIdOrKey} = flags
       const apiKey = flags.apiKey || getApiKey(this)
       const outputRoot = flags.output || './backlog-data'
 
@@ -67,7 +76,7 @@ export default class All extends Command {
       this.log('課題の取得を開始します...')
       await downloadIssues(this, {
         apiKey,
-        count: 100,
+        count: maxCount,
         domain,
         outputDir: issueOutput,
         projectId,
