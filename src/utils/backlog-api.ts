@@ -141,10 +141,6 @@ export async function downloadIssues(
   // 並列処理ではなく順次処理に変更
   for (const issue of filteredIssues) {
     try {
-      // 課題の詳細情報をJSONファイルとして保存
-      const issueFileName = `${sanitizeFileName(issue.summary)}.md`
-      const issueFilePath = path.join(options.outputDir, issueFileName)
-
       // BacklogのIssueへのリンクを作成
       const backlogIssueUrl = `https://${options.domain}/view/${issue.issueKey}`
 
@@ -174,6 +170,20 @@ export async function downloadIssues(
         // 最後の区切り線を削除
         commentsSection = commentsSection.slice(0, -5)
       }
+
+      // 課題の作成年を取得
+      const createdYear = new Date(issue.created).getFullYear()
+
+      // 年ごとのフォルダパスを作成
+      const yearDirPath = path.join(options.outputDir, createdYear.toString())
+
+      // 年ごとのフォルダを作成
+      // eslint-disable-next-line no-await-in-loop
+      await fs.mkdir(yearDirPath, {recursive: true})
+
+      // 年ごとのフォルダ内にMarkdownファイルを保存
+      const issueFileName = `${sanitizeFileName(issue.summary)}.md`
+      const issueFilePath = path.join(yearDirPath, issueFileName)
 
       // Markdownファイルに書き込む
       const assigneeName = issue.assignee ? issue.assignee.name : '未割り当て'
@@ -325,7 +335,6 @@ export async function downloadWikis(
   // 並列処理ではなく順次処理に変更
   for (const wiki of filteredWikis) {
     const wikiId = wiki.id
-    command.log(`Wiki: ${wiki.name} (ID: ${wikiId}) を取得しています`)
 
     try {
       // APIリクエスト数をインクリメント
@@ -366,8 +375,6 @@ export async function downloadWikis(
       const markdownContent = `# ${wiki.name}\n\n[Backlog Wiki Link](${backlogWikiUrl})\n\n${content}`
       // eslint-disable-next-line no-await-in-loop
       await fs.writeFile(wikiFilePath, markdownContent)
-
-      command.log(`Wiki "${wiki.name}" を ${wikiFilePath} に保存しました`)
     } catch (error) {
       command.warn(`Wiki ${wiki.name} の取得に失敗しました: ${error instanceof Error ? error.message : String(error)}`)
     }

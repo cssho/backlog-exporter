@@ -72,6 +72,24 @@ export default class All extends Command {
       const wikiOutput = path.join(outputRoot, 'wiki')
       await createOutputDirectory(wikiOutput)
 
+      // 課題フォルダに設定ファイルを保存
+      await updateSettings(issueOutput, {
+        apiKey,
+        domain,
+        folderType: FolderType.ISSUE,
+        outputDir: issueOutput,
+        projectIdOrKey,
+      })
+
+      // Wikiフォルダに設定ファイルを保存
+      await updateSettings(wikiOutput, {
+        apiKey,
+        domain,
+        folderType: FolderType.WIKI,
+        outputDir: wikiOutput,
+        projectIdOrKey,
+      })
+
       // 課題の取得と保存
       this.log('課題の取得を開始します...')
       await downloadIssues(this, {
@@ -82,14 +100,9 @@ export default class All extends Command {
         projectId,
       })
 
-      // 課題フォルダに設定ファイルを保存
+      // 課題フォルダの最終更新日時を更新
       await updateSettings(issueOutput, {
-        apiKey,
-        domain,
-        folderType: FolderType.ISSUE,
         lastUpdated: new Date().toISOString(),
-        outputDir: issueOutput,
-        projectIdOrKey,
       })
       this.log('課題の取得が完了しました')
 
@@ -102,14 +115,9 @@ export default class All extends Command {
         projectIdOrKey,
       })
 
-      // Wikiフォルダに設定ファイルを保存
+      // Wikiフォルダの最終更新日時を更新
       await updateSettings(wikiOutput, {
-        apiKey,
-        domain,
-        folderType: FolderType.WIKI,
         lastUpdated: new Date().toISOString(),
-        outputDir: wikiOutput,
-        projectIdOrKey,
       })
       this.log('Wikiの取得が完了しました')
 

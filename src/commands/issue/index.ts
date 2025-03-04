@@ -70,6 +70,15 @@ export default class Issue extends Command {
       const projectId = await validateAndGetProjectId(domain, projectIdOrKey, apiKey)
       this.log(`プロジェクトID: ${projectId} を使用します`)
 
+      // 設定ファイルを保存
+      await updateSettings(outputDir, {
+        apiKey,
+        domain,
+        folderType: FolderType.ISSUE,
+        outputDir,
+        projectIdOrKey,
+      })
+
       // 課題の取得と保存
       await downloadIssues(this, {
         apiKey,
@@ -80,14 +89,9 @@ export default class Issue extends Command {
         statusId,
       })
 
-      // 設定ファイルを保存
+      // 最終更新日時を更新
       await updateSettings(outputDir, {
-        apiKey,
-        domain,
-        folderType: FolderType.ISSUE,
         lastUpdated: new Date().toISOString(),
-        outputDir,
-        projectIdOrKey,
       })
 
       this.log('課題の取得が完了しました！')
