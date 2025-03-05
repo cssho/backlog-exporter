@@ -71,11 +71,13 @@ export async function updateSettings(directory: string, newSettings: Partial<Set
   // 既存の設定を読み込む
   const currentSettings = await loadSettings(directory)
 
-  // 新しい設定で更新
-  const updatedSettings = {...currentSettings, ...newSettings}
+  // 新しい設定で更新（apiKeyは除外）
+  const {apiKey, ...settingsToSave} = newSettings
+  const updatedSettings = {...currentSettings, ...settingsToSave}
 
   // 更新した設定を保存
   await saveSettings(directory, updatedSettings)
 
-  return updatedSettings
+  // apiKeyは戻り値には含める
+  return {...updatedSettings, apiKey}
 }
