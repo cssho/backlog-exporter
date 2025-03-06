@@ -38,7 +38,6 @@ Backlog のデータをエクスポートするためのコマンドラインツ
 * [課題のタイトル](#課題のタイトル)
 * [Wiki のタイトル](#wiki-のタイトル)
 * [その他の特徴](#その他の特徴)
-* [最近の変更点](#最近の変更点)
 <!-- tocstop -->
 
 # 概要
@@ -59,7 +58,7 @@ $ npm install -g backlog-exporter
 $ backlog-exporter COMMAND
 running command...
 $ backlog-exporter (--version)
-backlog-exporter/0.2.2 linux-x64 node-v20.18.3
+backlog-exporter/0.2.3 linux-x64 node-v20.18.3
 $ backlog-exporter --help [COMMAND]
 USAGE
   $ backlog-exporter COMMAND
