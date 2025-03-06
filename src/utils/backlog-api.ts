@@ -276,6 +276,8 @@ async function fetchAllCommentsForIssue({
 
   try {
     await fetchComments()
+    // コメントを古い順（昇順）に並び替える
+    allComments.sort((a, b) => new Date(a.created).getTime() - new Date(b.created).getTime())
     return {comments: allComments}
   } catch (error) {
     command.warn(
