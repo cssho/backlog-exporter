@@ -5,6 +5,7 @@ import path from 'node:path'
 import process from 'node:process'
 
 import {sanitizeFileName, sanitizeWikiFileName} from './common.js'
+import {appendLog} from './log.js'
 import {RateLimiter} from './sleep.js'
 
 /**
@@ -209,6 +210,10 @@ ${issue.description || '詳細情報なし'}${commentsSection}`
 
       // eslint-disable-next-line no-await-in-loop
       await fs.writeFile(issueFilePath, markdownContent)
+
+      // ログに記録
+      // eslint-disable-next-line no-await-in-loop
+      await appendLog(options.outputDir, `課題「${issue.summary}」を更新しました: ${backlogIssueUrl}`)
     } catch (error) {
       command.warn(
         `課題 ${issue.issueKey} の保存に失敗しました: ${error instanceof Error ? error.message : String(error)}`,
@@ -387,6 +392,10 @@ export async function downloadWikis(
       const markdownContent = `# ${wiki.name}\n\n[Backlog Wiki Link](${backlogWikiUrl})\n\n${content}`
       // eslint-disable-next-line no-await-in-loop
       await fs.writeFile(wikiFilePath, markdownContent)
+
+      // ログに記録
+      // eslint-disable-next-line no-await-in-loop
+      await appendLog(options.outputDir, `Wiki「${wiki.name}」を更新しました: ${backlogWikiUrl}`)
 
       // 進捗状況を一行で更新
       const wikiIndex = filteredWikis.indexOf(wiki) + 1
