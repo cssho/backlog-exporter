@@ -189,7 +189,7 @@ export async function downloadIssues(
       await fs.mkdir(yearDirPath, {recursive: true})
 
       // 年ごとのフォルダ内にMarkdownファイルを保存
-      const issueFileName = `${sanitizeFileName(issue.summary)}.md`
+      const issueFileName = `${sanitizeFileName(issue.issueKey)}.md`
       const issueFilePath = path.join(yearDirPath, issueFileName)
 
       // Markdownファイルに書き込む
@@ -363,8 +363,8 @@ export async function downloadWikis(
         .get(`${baseUrl}/wikis/${wikiId}?projectIdOrKey=${options.projectIdOrKey}&apiKey=${options.apiKey}`)
         .json<Record<string, unknown>>()
 
-      // Wikiの名前をファイルパスとして使用
-      const wikiName = wiki.name
+      // WikiのIDをファイルパスとして使用
+      const wikiName = wiki.id
 
       // ファイル名のサニタイズ
       const sanitizedName = sanitizeWikiFileName(wikiName)
